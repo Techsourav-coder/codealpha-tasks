@@ -1,0 +1,130 @@
+#CODE:-
+# todo_app.py
+
+import json
+import os
+
+FILE_NAME = "tasks.json"
+tasks = []
+
+def load_tasks():
+    global tasks
+    if os.path.exists(FILE_NAME):
+        with open(FILE_NAME, "r") as file:
+            tasks = json.load(file)
+    else:
+        tasks = []
+
+def save_tasks():
+    with open(FILE_NAME, "w") as file:
+        json.dump(tasks, file, indent=4)
+
+def show_menu():
+    print("\n=== TO-DO LIST MENU ===")
+    print("1. Add Task")
+    print("2. View Tasks")
+    print("3. Mark Task as Done")
+    print("4. Delete Task")
+    print("5. Exit")
+
+def add_task():
+    task = input("Enter task name: ")
+    tasks.append({"task": task, "done": False})
+    save_tasks()
+    print("Task added!")
+
+def view_tasks():
+    if not tasks:
+        print("No tasks yet.")
+        return
+    print("\nYour Tasks:")
+    for i, task in enumerate(tasks, 1):
+        status = "✔️" if task["done"] else "❌"
+        print(f"{i}. {task['task']} [{status}]")
+
+def mark_done():
+    view_tasks()
+    try:
+        index = int(input("Enter task number to mark as done: ")) - 1
+        if 0 <= index < len(tasks):
+            tasks[index]["done"] = True
+            save_tasks()
+            print("Task marked as done!")
+        else:
+            print("Invalid task number.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+def delete_task():
+    view_tasks()
+    try:
+        index = int(input("Enter task number to delete: ")) - 1
+        if 0 <= index < len(tasks):
+            tasks.pop(index)
+            save_tasks()
+            print("Task deleted!")
+        else:
+            print("Invalid task number.")
+    except ValueError:
+        print("Please enter a valid number.")
+
+def main():
+    load_tasks()
+    while True:
+        show_menu()
+        choice = input("Choose an option: ")
+        if choice == "1":
+            add_task()
+        elif choice == "2":
+            view_tasks()
+        elif choice == "3":
+            mark_done()
+        elif choice == "4":
+            delete_task()
+        elif choice == "5":
+            print("Goodbye!")
+            break
+        else:
+            print("Invalid option. Try again.")
+
+if __name__ == "__main__":
+    main()
+
+#OUTPUT:-
+=== TO-DO LIST MENU ===
+1. Add Task
+2. View Tasks
+3. Mark Task as Done
+4. Delete Task
+5. Exit
+Choose an option: 2
+No tasks yet.
+
+=== TO-DO LIST MENU ===
+1. Add Task
+2. View Tasks
+3. Mark Task as Done
+4. Delete Task
+5. Exit
+Choose an option: 1
+Enter task name: jingalala
+Task added!
+
+=== TO-DO LIST MENU ===
+1. Add Task
+2. View Tasks
+3. Mark Task as Done
+4. Delete Task
+5. Exit
+Choose an option: 2
+
+Your Tasks:
+1. jingalala [❌]
+
+=== TO-DO LIST MENU ===
+1. Add Task
+2. View Tasks
+3. Mark Task as Done
+4. Delete Task
+5. Exit
+---------------------------------------------------------------------------
